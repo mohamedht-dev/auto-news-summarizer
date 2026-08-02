@@ -3,29 +3,65 @@ from bs4 import BeautifulSoup
 import feedparser
 import os
 from datetime import datetime
+import re
 
-# Placeholder for a real AI summarization function
-def summarize_text_ai(text):
-    """Placeholder for an AI-powered text summarization function.
-    This function would typically call an external AI service (e.g., OpenAI API)
-    or use a local NLP model to generate a concise summary of the input text.
-    For now, it returns a truncated version of the text.
-    """
-    words = text.split()
-    if len(words) > 30:
-        return ' '.join(words[:30]) + '... (AI Summary Placeholder)'
-    return text + '... (AI Summary Placeholder)'
+def clean_html(raw_html):
+    """Removes HTML tags from a string and cleans up whitespace."""
+    if not raw_html:
+        return ""
+    soup = BeautifulSoup(raw_html, "html.parser")
+    text = soup.get_text(separator=" ")
+    return re.sub(r'\s+', ' ', text).strip()
+
+def summarize_extractive_free(text, max_sentences=3):
+    """A free, non-AI extractive summarizer that picks the first few sentences."""
+    if not text:
+        return "No content available to summarize."
+    sentences = re.split(r'(?<=[.!?])\s+', text)
+    summary = " ".join(sentences[:max_sentences])
+    return summary + " (Free Extractive Summary)"
+
+def summarize_with_openai(text):
+    """Summarizes text using OpenAI's API if an API key is provided."""
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        return None
+    
+    try:
+        # Note: Using requests directly to avoid dependency on the openai library if not needed
+        headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json"
+        }
+        data = {
+            "model": "gpt-3.5-turbo",
+            "messages": [
+                {"role": "system", "content": "You are a helpful assistant that summarizes tech news in a concise way. Provide the summary in both English and Arabic."},
+                {"role": "user", "content": f"Summarize this article: {text[:4000]}"}
+            ],
+            "max_tokens": 500
+        }
+        response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=data, timeout=30)
+        response.raise_for_status()
+        return response.json()['choices'][0]['message']['content'].strip()
+    except Exception as e:
+        print(f"OpenAI API Error: {e}")
+        return None
 
 def fetch_tech_news_rss(rss_url="https://techcrunch.com/feed/"):
-    """Fetches tech news from an RSS feed."""
+    """Fetches tech news from an RSS feed with timeout and error handling."""
     try:
-        feed = feedparser.parse(rss_url)
+        response = requests.get(rss_url, timeout=15, headers={"User-Agent": "Mozilla/5.0"})
+        response.raise_for_status()
+        feed = feedparser.parse(response.content)
         articles = []
         for entry in feed.entries:
             title = entry.title if hasattr(entry, 'title') else 'No Title'
             link = entry.link if hasattr(entry, 'link') else '#'
-            summary = entry.summary if hasattr(entry, 'summary') else 'No Summary'
-            articles.append({'title': title, 'link': link, 'summary': summary})
+            # Clean HTML from the summary/description
+            raw_summary = entry.summary if hasattr(entry, 'summary') else (entry.description if hasattr(entry, 'description') else '')
+            clean_summary = clean_html(raw_summary)
+            articles.append({'title': title, 'link': link, 'content': clean_summary})
         return articles
     except Exception as e:
         print(f"Error fetching news from RSS: {e}")
@@ -44,26 +80,30 @@ def save_daily_briefing(briefing_content, directory="daily_briefings"):
     print(f"Daily briefing saved to {filename}")
 
 def main():
-    print("بدء تشغيل جالب وملخص الأخبار التقنية...")
+    print("Starting Arabic AI Tech Brief...")
     
-    # Fetch news from RSS feed
     news_articles = fetch_tech_news_rss()
 
-    briefing_output = f"# ملخص الأخبار التقنية اليومي - {datetime.now().strftime('%Y-%m-%d %H:%M')}\n\n"
-    briefing_output += "## آخر الأخبار التقنية:\n\n"
+    briefing_output = f"# Tech News Daily Briefing - {datetime.now().strftime('%Y-%m-%d %H:%M')}\n\n"
+    briefing_output += "## Latest Tech News Summaries:\n\n"
 
     if news_articles:
         for i, article in enumerate(news_articles[:5]): # Process top 5 articles
-            # For now, we summarize the article's summary or title
-            # In a future step, we'd fetch the full article content and summarize it with AI
-            summarized_content = summarize_text_ai(article['summary'] if article['summary'] != 'No Summary' else article['title'])
+            print(f"Processing article {i+1}: {article['title']}")
+            
+            # Try AI summarization first, fall back to extractive if it fails or no key
+            summary = summarize_with_openai(article['content'])
+            if not summary:
+                summary = summarize_extractive_free(article['content'])
+            
             briefing_output += f"### {i+1}. [{article['title']}]({article['link']})\n"
-            briefing_output += f"> {summarized_content}\n\n"
+            briefing_output += f"{summary}\n\n"
+            briefing_output += "---\n\n"
     else:
-        briefing_output += "لم يتم العثور على أخبار تقنية.\n"
+        briefing_output += "No tech news found today.\n"
     
-    print(briefing_output)
     save_daily_briefing(briefing_output)
+    print("Briefing generated successfully.")
 
 if __name__ == "__main__":
     main()

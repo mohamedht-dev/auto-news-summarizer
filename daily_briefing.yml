@@ -2,8 +2,12 @@ name: Daily Tech Briefing
 
 on:
   schedule:
-    - cron: '0 0 * * *' # Runs every day at midnight UTC
+    - cron: '0 8 * * *' # Runs every day at 8 AM Asia/Riyadh time
+      timezone: "Asia/Riyadh"
   workflow_dispatch: # Allows manual trigger
+
+permissions:
+  contents: write # Grant write permission to the GITHUB_TOKEN
 
 jobs:
   update-briefing:
