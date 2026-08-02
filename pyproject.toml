@@ -1,0 +1,23 @@
+[project]
+name = "arabic-ai-tech-brief"
+version = "0.1.0"
+authors = [
+  { name="Mohamed Awad", email="moha.awd@gmail.com" },
+]
+description = "A lightweight Python CLI for fetching and displaying technology news headlines."
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "requests",
+    "beautifulsoup4",
+    "feedparser",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/mohamedht-dev/auto-news-summarizer"
+"Bug Tracker" = "https://github.com/mohamedht-dev/auto-news-summarizer/issues"
