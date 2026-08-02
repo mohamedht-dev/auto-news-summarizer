@@ -32,6 +32,8 @@ class BriefingItem(GeneratedSummary):
     source_url: str
     source_name: str = ""
     published: str = "Unknown"
+    original_title: str = ""
+    category: str = "technology"
 
 
 class DailyBriefing(BaseModel):

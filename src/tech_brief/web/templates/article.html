@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% from "macros.html" import article_card %}
+{% block content %}
+<article class="article-page">
+  <div class="container article-shell">
+    <nav class="breadcrumbs" aria-label="مسار الصفحة"><a href="/">الرئيسية</a><span>←</span><a href="/?category={{ article.category }}">{{ category_label(article.category) }}</a></nav>
+    <header class="article-header">
+      <div class="card-topline"><span class="category-pill">{{ category_label(article.category) }}</span><span>{{ article.source_name }}</span><span class="meta-separator">•</span><time>{{ article.published }}</time></div>
+      <h1>{{ article.headline_ar }}</h1>
+      {% if article.original_title and article.original_title != article.headline_ar %}<p class="original-title" lang="en" dir="ltr">{{ article.original_title }}</p>{% endif %}
+      <div class="article-actions">
+        <div class="language-switch" role="group" aria-label="لغة الملخص"><button class="active" type="button" data-language="ar">العربية</button><button type="button" data-language="en">English</button></div>
+        <a class="source-button" href="{{ article.link }}" target="_blank" rel="noopener noreferrer">المصدر الأصلي ↗</a>
+      </div>
+    </header>
+
+    <div class="article-layout">
+      <div class="article-main">
+        <section class="summary-panel language-panel active" data-panel="ar">
+          <span class="panel-label">الخلاصة</span><p>{{ article.summary_ar }}</p>
+        </section>
+        <section class="summary-panel language-panel" data-panel="en" lang="en" dir="ltr">
+          <span class="panel-label">Summary</span><p>{{ article.summary_en }}</p>
+        </section>
+        <section class="key-points"><div class="section-icon">✦</div><div><h2>أهم النقاط</h2><ul>{% for point in article.key_points %}<li>{{ point }}</li>{% endfor %}</ul></div></section>
+        <section class="why-panel"><span>لماذا يهم؟</span><p>{{ article.why_it_matters }}</p></section>
+        {% if article.companies or article.technologies %}<section class="entities"><h2>ذُكر في الخبر</h2><div class="entity-groups">{% if article.companies %}<div><span>الشركات</span><p>{% for item in article.companies %}<a href="/?q={{ item|urlencode }}">{{ item }}</a>{% endfor %}</p></div>{% endif %}{% if article.technologies %}<div><span>التقنيات</span><p>{% for item in article.technologies %}<a href="/?q={{ item|urlencode }}">{{ item }}</a>{% endfor %}</p></div>{% endif %}</div></section>{% endif %}
+      </div>
+      <aside class="article-sidebar">
+        <div class="confidence-card"><div class="confidence-ring" aria-label="ثقة الملخص {{ (article.confidence * 100)|round|int }} بالمئة"><svg viewBox="0 0 42 42" aria-hidden="true"><circle class="confidence-track" cx="21" cy="21" r="17" pathLength="100"></circle><circle class="confidence-value" cx="21" cy="21" r="17" pathLength="100" stroke-dasharray="{{ (article.confidence * 100)|round|int }} 100"></circle></svg><strong>{{ (article.confidence * 100)|round|int }}%</strong></div><div><strong>ثقة الملخص</strong><p>مؤشر آلي لجودة المادة المتاحة.</p></div></div>
+        <div class="source-card"><span>المصدر</span><strong>{{ article.source_name }}</strong><a href="{{ article.link }}" target="_blank" rel="noopener noreferrer">فتح المقال الأصلي ↗</a></div>
+        <div class="disclaimer">الملخص مولّد آليًا وقد يخطئ. ارجع دائمًا إلى المصدر الأصلي للمعلومات الحساسة.</div>
+      </aside>
+    </div>
+  </div>
+</article>
+{% if related %}<section class="related-section"><div class="container"><div class="section-heading"><div><span class="section-kicker">في السياق نفسه</span><h2>أخبار مرتبطة</h2></div></div><div class="news-grid">{% for item in related %}{{ article_card(item, true) }}{% endfor %}</div></div></section>{% endif %}
+{% endblock %}

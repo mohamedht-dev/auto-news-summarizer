@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="{{ description }}">
+  <meta name="theme-color" content="#101a17">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ar_SA">
+  <meta property="og:title" content="{{ title }}">
+  <meta property="og:description" content="{{ description }}">
+  <meta property="og:url" content="{{ canonical_url }}">
+  <meta property="og:image" content="{{ request.url_for('static', path='og.png') }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="{{ canonical_url }}">
+  <link rel="alternate" type="application/rss+xml" title="نبض التقنية" href="/feed.xml">
+  <link rel="manifest" href="{{ request.url_for('static', path='manifest.webmanifest') }}">
+  <link rel="stylesheet" href="{{ request.url_for('static', path='styles.css') }}">
+  <script defer src="{{ request.url_for('static', path='app.js') }}"></script>
+  <title>{{ title }}</title>
+</head>
+<body>
+  <a class="skip-link" href="#content">انتقل إلى المحتوى</a>
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/" aria-label="نبض التقنية — الرئيسية">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span><strong>نبض</strong><small>التقنية</small></span>
+      </a>
+      <nav class="main-nav" aria-label="التنقل الرئيسي">
+        <a href="/" class="{% if request.url.path == '/' %}active{% endif %}">الرئيسية</a>
+        <a href="/archive" class="{% if request.url.path == '/archive' %}active{% endif %}">الأرشيف</a>
+        <a href="/feed.xml">RSS</a>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-button" type="button" data-theme-toggle aria-label="تبديل الوضع الليلي">
+          <span class="sun" aria-hidden="true">☀</span><span class="moon" aria-hidden="true">☾</span>
+        </button>
+        {% if is_admin %}
+          <a class="admin-link" href="/admin">الإدارة</a>
+        {% else %}
+          <a class="admin-link subtle" href="/admin">دخول</a>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+
+  {% if flash %}
+    <div class="container flash-wrap">
+      <div class="flash flash-{{ flash.kind }}" role="status">
+        <span>{{ flash.message }}</span>
+        <button type="button" data-dismiss aria-label="إغلاق">×</button>
+      </div>
+    </div>
+  {% endif %}
+
+  <main id="content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <a class="brand footer-brand" href="/">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span><strong>نبض</strong><small>التقنية</small></span>
+        </a>
+        <p>موجز عربي ذكي يختصر الضجيج ويقرّب لك ما يستحق المتابعة.</p>
+      </div>
+      <div class="footer-links">
+        <strong>استكشف</strong>
+        <a href="/">آخر الأخبار</a>
+        <a href="/archive">الأرشيف</a>
+        <a href="/api/docs">واجهة API</a>
+      </div>
+      <div class="footer-links">
+        <strong>تابع الموجز</strong>
+        <a href="/feed.xml">خلاصة RSS</a>
+        <a href="https://github.com/mohamedht-dev/auto-news-summarizer">المشروع على GitHub</a>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <span>© {{ current_year }} نبض التقنية</span>
+      <span>محتوى مولّد آليًا — راجع المصدر قبل اتخاذ القرارات.</span>
+    </div>
+  </footer>
+</body>
+</html>

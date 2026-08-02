@@ -37,6 +37,8 @@ class ExtractiveSummarizer:
             source_url=article.link,
             source_name=article.source,
             published=article.published,
+            original_title=article.title,
+            category=article.category,
         )
 
     @staticmethod

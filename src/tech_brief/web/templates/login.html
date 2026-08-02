@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="login-section">
+  <div class="login-card">
+    <div class="login-mark"><span></span><strong>نبض</strong></div>
+    <span class="section-kicker">منطقة محمية</span><h1>دخول الإدارة</h1><p>أدخل كلمة المرور لإدارة المصادر وتشغيل الموجز.</p>
+    {% if admin_configured %}<form method="post" action="/admin/login"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><label>كلمة المرور<input type="password" name="password" required autocomplete="current-password" autofocus></label><button class="button primary full" type="submit">دخول آمن</button></form>{% else %}<div class="setup-note"><strong>الإدارة غير مفعّلة</strong><p>عيّن المتغير <code>TECH_BRIEF_ADMIN_PASSWORD</code> ثم أعد تشغيل المنصة.</p></div>{% endif %}
+    <a class="back-link" href="/">العودة للرئيسية</a>
+  </div>
+</section>
+{% endblock %}

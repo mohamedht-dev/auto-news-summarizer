@@ -1,0 +1,29 @@
+services:
+  web:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
+      TECH_BRIEF_ADMIN_PASSWORD: ${TECH_BRIEF_ADMIN_PASSWORD:-}
+      TECH_BRIEF_SESSION_SECRET: ${TECH_BRIEF_SESSION_SECRET:-change-this-in-production}
+      TECH_BRIEF_ALLOWED_HOSTS: ${TECH_BRIEF_ALLOWED_HOSTS:-localhost,127.0.0.1}
+      TECH_BRIEF_COOKIE_SECURE: ${TECH_BRIEF_COOKIE_SECURE:-0}
+    volumes:
+      - tech-brief-data:/app/data
+
+  worker:
+    build: .
+    restart: unless-stopped
+    command: ["tech-brief", "worker", "--interval-minutes", "60", "--limit", "15"]
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
+      TECH_BRIEF_SESSION_SECRET: ${TECH_BRIEF_SESSION_SECRET:-change-this-in-production}
+    volumes:
+      - tech-brief-data:/app/data
+
+volumes:
+  tech-brief-data:

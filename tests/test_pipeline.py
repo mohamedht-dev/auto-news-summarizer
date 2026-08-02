@@ -48,3 +48,14 @@ def test_pipeline_keeps_successful_items_and_reports_individual_failures():
     assert result.fetched == 2
     assert result.unique == 2
     assert result.errors == ["one source was unavailable", "Two: summary failed"]
+
+
+def test_pipeline_skips_links_already_saved():
+    result = BriefingPipeline(FakeFetcher(), FakeProcessor(), FakeSummarizer()).run(
+        limit=2,
+        skip_links={"https://example.com/1"},
+    )
+
+    assert result.items == []
+    assert result.skipped == 1
+    assert result.errors == ["one source was unavailable", "Two: summary failed"]

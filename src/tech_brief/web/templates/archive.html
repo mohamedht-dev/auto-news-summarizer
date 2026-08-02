@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% from "macros.html" import article_card, pagination %}
+{% block content %}
+<section class="page-hero compact-hero">
+  <div class="container">
+    <span class="eyebrow"><i></i> ذاكرة المنصة</span>
+    <h1>أرشيف الأخبار</h1>
+    <p>ابحث في كل ما لخّصته المنصة، وصِل إلى الفكرة التي تحتاجها بسرعة.</p>
+  </div>
+</section>
+<section class="content-section archive-section">
+  <div class="container">
+    <form class="filter-bar" method="get" action="/archive" role="search">
+      <label class="search-field"><span aria-hidden="true">⌕</span><input type="search" name="q" value="{{ q }}" placeholder="ابحث في الأرشيف…" aria-label="بحث"></label>
+      <select name="category" aria-label="التصنيف"><option value="">كل التصنيفات</option>{% for item in categories %}<option value="{{ item }}" {% if selected_category == item %}selected{% endif %}>{{ category_label(item) }}</option>{% endfor %}</select>
+      <select name="source" aria-label="المصدر"><option value="">كل المصادر</option>{% for item in sources %}<option value="{{ item.id }}" {% if selected_source == item.id %}selected{% endif %}>{{ item.name }}</option>{% endfor %}</select>
+      <button class="button filter-button" type="submit">بحث</button>
+    </form>
+    <div class="archive-summary"><strong>{{ total }}</strong><span>نتيجة</span></div>
+    {% if articles %}<div class="news-grid">{% for article in articles %}{{ article_card(article) }}{% endfor %}</div>{{ pagination(page, page_count, q, selected_category, selected_source) }}{% else %}<div class="empty-state"><span class="empty-mark">⌁</span><h2>لا توجد نتائج</h2><p>غيّر كلمات البحث أو عد إلى كل الأخبار.</p><a class="button primary" href="/archive">مسح البحث</a></div>{% endif %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% macro article_card(article, compact=false) %}
+<article class="news-card {% if compact %}compact{% endif %}">
+  <a class="card-link" href="/articles/{{ article.id }}" aria-label="اقرأ: {{ article.headline_ar }}"></a>
+  <div class="card-topline">
+    <span class="category-pill">{{ category_label(article.category) }}</span>
+    <span class="confidence" title="درجة ثقة الملخص">{{ (article.confidence * 100)|round|int }}%</span>
+  </div>
+  <h3>{{ article.headline_ar }}</h3>
+  {% if not compact %}<p>{{ article.summary_ar }}</p>{% endif %}
+  <div class="card-meta">
+    <span class="source-dot"></span>
+    <span>{{ article.source_name }}</span>
+    <span class="meta-separator">•</span>
+    <time>{{ article.published }}</time>
+  </div>
+</article>
+{% endmacro %}
+
+{% macro pagination(page, page_count, q='', category='', source='') %}
+{% if page_count > 1 %}
+<nav class="pagination" aria-label="صفحات النتائج">
+  {% if page > 1 %}
+    <a href="?q={{ q|urlencode }}&category={{ category|urlencode }}&source={{ source or '' }}&page={{ page - 1 }}">السابق</a>
+  {% else %}<span class="disabled">السابق</span>{% endif %}
+  <span>صفحة {{ page }} من {{ page_count }}</span>
+  {% if page < page_count %}
+    <a href="?q={{ q|urlencode }}&category={{ category|urlencode }}&source={{ source or '' }}&page={{ page + 1 }}">التالي</a>
+  {% else %}<span class="disabled">التالي</span>{% endif %}
+</nav>
+{% endif %}
+{% endmacro %}

@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 from .config import DEFAULT_MAX_CONTENT_CHARS
 from .models import Article
 
-USER_AGENT = "ArabicAITechBrief/0.3 (+https://github.com/mohamedht-dev/auto-news-summarizer)"
+USER_AGENT = "ArabicAITechBrief/0.4 (+https://github.com/mohamedht-dev/auto-news-summarizer)"
 
 
 class ArticleProcessor:

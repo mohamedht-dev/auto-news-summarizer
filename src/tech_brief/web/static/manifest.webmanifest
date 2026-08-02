@@ -1,0 +1,11 @@
+{
+  "name": "نبض التقنية",
+  "short_name": "نبض",
+  "description": "موجز عربي ذكي لأخبار التقنية والذكاء الاصطناعي",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f6f4ec",
+  "theme_color": "#101a17"
+}
