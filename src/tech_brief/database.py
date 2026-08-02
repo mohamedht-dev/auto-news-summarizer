@@ -2,6 +2,7 @@
 
 import json
 import sqlite3
+from collections import Counter
 from contextlib import contextmanager
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -244,6 +245,24 @@ class Database:
             ).fetchall()
         return [row["category"] for row in rows]
 
+    def top_topics(self, limit: int = 8) -> List[Dict[str, object]]:
+        with self.connect() as connection:
+            rows = connection.execute(
+                "SELECT companies, technologies FROM articles ORDER BY id DESC LIMIT 200"
+            ).fetchall()
+        topics: Counter = Counter()
+        for row in rows:
+            for value in self._json_list(row["companies"]):
+                if value.strip():
+                    topics[value.strip()] += 1
+            for value in self._json_list(row["technologies"]):
+                if value.strip():
+                    topics[value.strip()] += 1
+        return [
+            {"name": name, "count": count}
+            for name, count in topics.most_common(max(limit, 0))
+        ]
+
     def stats(self) -> Dict[str, int]:
         with self.connect() as connection:
             article_count = connection.execute("SELECT COUNT(*) FROM articles").fetchone()[0]
@@ -331,6 +350,14 @@ class Database:
         item = dict(row)
         for key in ("key_points", "companies", "technologies"):
             item[key] = cls._json_list(item[key])
+        reading_words = " ".join(
+            [
+                str(item.get("summary_ar", "")),
+                str(item.get("summary_en", "")),
+                *[str(point) for point in item["key_points"]],
+            ]
+        ).split()
+        item["reading_minutes"] = max(1, (len(reading_words) + 179) // 180)
         return item
 
     @staticmethod

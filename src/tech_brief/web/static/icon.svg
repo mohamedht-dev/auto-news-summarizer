@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">نبض التقنية</title>
+  <rect width="512" height="512" rx="112" fill="#101a17"/>
+  <circle cx="256" cy="256" r="172" fill="none" stroke="#d9ed91" stroke-opacity=".2" stroke-width="8"/>
+  <g fill="#d9ed91">
+    <rect x="142" y="216" width="52" height="80" rx="26"/>
+    <rect x="230" y="132" width="52" height="248" rx="26"/>
+    <rect x="318" y="180" width="52" height="152" rx="26"/>
+  </g>
+</svg>

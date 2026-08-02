@@ -22,6 +22,15 @@
   </div>
 </section>
 
+{% if topics %}
+<section class="topics-strip" aria-label="المواضيع الرائجة">
+  <div class="container topics-inner">
+    <strong>الرائج الآن</strong>
+    <div>{% for topic in topics %}<a href="/?q={{ topic.name|urlencode }}">{{ topic.name }} <span>{{ topic.count }}</span></a>{% endfor %}</div>
+  </div>
+</section>
+{% endif %}
+
 <section class="ticker" aria-label="مصادر الأخبار">
   <div class="container ticker-inner">
     <span class="live-label"><i></i> المصادر النشطة</span>
@@ -65,7 +74,8 @@
       <article class="featured-story">
         <div class="featured-index"><span>01</span><i></i></div>
         <div class="featured-content">
-          <div class="card-topline"><span class="category-pill">{{ category_label(featured.category) }}</span><span>{{ featured.source_name }}</span></div>
+          <div class="card-topline"><span class="category-pill">{{ category_label(featured.category) }}</span><span>{{ featured.source_name }}</span><span class="meta-separator">•</span><span>{{ featured.reading_minutes }} د قراءة</span></div>
+          <button class="bookmark-button featured-bookmark" type="button" data-bookmark="{{ featured.link }}" aria-label="حفظ الخبر للقراءة لاحقًا" aria-pressed="false"><span aria-hidden="true">♡</span></button>
           <h2><a href="/articles/{{ featured.id }}">{{ featured.headline_ar }}</a></h2>
           <p>{{ featured.summary_ar }}</p>
           <a class="read-more" href="/articles/{{ featured.id }}">اقرأ التحليل <span>←</span></a>

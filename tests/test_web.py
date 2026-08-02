@@ -44,16 +44,29 @@ def test_public_pages_api_feed_and_security_headers(tmp_path):
         home = client.get("/")
         archive = client.get("/archive", params={"q": "منصة"})
         article = client.get(f"/articles/{article_id}")
+        saved = client.get("/saved")
         api = client.get("/api/articles", params={"q": "developer"})
+        stats = client.get("/api/stats")
         feed = client.get("/feed.xml")
 
         assert home.status_code == 200
         assert "منصة جديدة للمطورين" in home.text
+        assert "data-bookmark" in home.text
         assert home.headers["x-frame-options"] == "DENY"
         assert client.get("/static/og.png").status_code == 200
+        assert client.get("/static/icon.svg").status_code == 200
         assert archive.status_code == 200
         assert article.status_code == 200
+        assert "د قراءة" in article.text
+        assert saved.status_code == 200
+        assert "data-saved-grid" in saved.text
         assert api.json()["total"] == 1
+        assert stats.json()["stats"]["articles"] == 1
+        assert stats.json()["top_topics"][0] == {"name": "Example", "count": 1}
+        service_worker = client.get("/service-worker.js")
+        assert service_worker.status_code == 200
+        assert service_worker.headers["service-worker-allowed"] == "/"
+        assert "nabd-tech-v2" in service_worker.text
         assert feed.status_code == 200
         assert "application/rss+xml" in feed.headers["content-type"]
         assert "default-src 'self'" in home.headers["content-security-policy"]

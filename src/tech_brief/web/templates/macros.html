@@ -1,10 +1,11 @@
-{% macro article_card(article, compact=false) %}
-<article class="news-card {% if compact %}compact{% endif %}">
+{% macro article_card(article, compact=false, saved_only=false) %}
+<article class="news-card {% if compact %}compact{% endif %}" data-article-id="{{ article.id }}" data-article-key="{{ article.link }}" {% if saved_only %}data-saved-only hidden{% endif %}>
   <a class="card-link" href="/articles/{{ article.id }}" aria-label="اقرأ: {{ article.headline_ar }}"></a>
   <div class="card-topline">
     <span class="category-pill">{{ category_label(article.category) }}</span>
     <span class="confidence" title="درجة ثقة الملخص">{{ (article.confidence * 100)|round|int }}%</span>
   </div>
+  <button class="bookmark-button" type="button" data-bookmark="{{ article.link }}" aria-label="حفظ الخبر للقراءة لاحقًا" aria-pressed="false"><span aria-hidden="true">♡</span></button>
   <h3>{{ article.headline_ar }}</h3>
   {% if not compact %}<p>{{ article.summary_ar }}</p>{% endif %}
   <div class="card-meta">
@@ -12,6 +13,8 @@
     <span>{{ article.source_name }}</span>
     <span class="meta-separator">•</span>
     <time>{{ article.published }}</time>
+    <span class="meta-separator">•</span>
+    <span>{{ article.reading_minutes }} د قراءة</span>
   </div>
 </article>
 {% endmacro %}

@@ -5,11 +5,13 @@
   <div class="container article-shell">
     <nav class="breadcrumbs" aria-label="مسار الصفحة"><a href="/">الرئيسية</a><span>←</span><a href="/?category={{ article.category }}">{{ category_label(article.category) }}</a></nav>
     <header class="article-header">
-      <div class="card-topline"><span class="category-pill">{{ category_label(article.category) }}</span><span>{{ article.source_name }}</span><span class="meta-separator">•</span><time>{{ article.published }}</time></div>
+      <div class="card-topline"><span class="category-pill">{{ category_label(article.category) }}</span><span>{{ article.source_name }}</span><span class="meta-separator">•</span><time>{{ article.published }}</time><span class="meta-separator">•</span><span>{{ article.reading_minutes }} د قراءة</span></div>
       <h1>{{ article.headline_ar }}</h1>
       {% if article.original_title and article.original_title != article.headline_ar %}<p class="original-title" lang="en" dir="ltr">{{ article.original_title }}</p>{% endif %}
       <div class="article-actions">
         <div class="language-switch" role="group" aria-label="لغة الملخص"><button class="active" type="button" data-language="ar">العربية</button><button type="button" data-language="en">English</button></div>
+        <button class="source-button action-button" type="button" data-bookmark="{{ article.link }}" aria-label="حفظ الخبر للقراءة لاحقًا" aria-pressed="false"><span aria-hidden="true">♡</span> حفظ</button>
+        <button class="source-button action-button" type="button" data-share data-title="{{ article.headline_ar }}">مشاركة</button>
         <a class="source-button" href="{{ article.link }}" target="_blank" rel="noopener noreferrer">المصدر الأصلي ↗</a>
       </div>
     </header>
@@ -34,5 +36,6 @@
     </div>
   </div>
 </article>
+<div class="toast" data-toast role="status" aria-live="polite" hidden></div>
 {% if related %}<section class="related-section"><div class="container"><div class="section-heading"><div><span class="section-kicker">في السياق نفسه</span><h2>أخبار مرتبطة</h2></div></div><div class="news-grid">{% for item in related %}{{ article_card(item, true) }}{% endfor %}</div></div></section>{% endif %}
 {% endblock %}

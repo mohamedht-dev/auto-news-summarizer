@@ -13,6 +13,7 @@ from xml.etree import ElementTree
 from fastapi import BackgroundTasks, FastAPI, Form, HTTPException, Request
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import (
+    FileResponse,
     HTMLResponse,
     JSONResponse,
     PlainTextResponse,
@@ -59,7 +60,7 @@ def create_app(database_path: Optional[str] = None) -> FastAPI:
     application = FastAPI(
         title="نبض التقنية",
         description="منصة عربية ذكية لمتابعة أهم أخبار التقنية والذكاء الاصطناعي.",
-        version="0.4.0",
+        version="0.5.0",
         docs_url="/api/docs",
         redoc_url=None,
     )
@@ -122,7 +123,23 @@ def create_app(database_path: Optional[str] = None) -> FastAPI:
                 page=page,
                 page_count=max(math.ceil(total / per_page), 1),
                 total=total,
+                topics=database.top_topics(),
                 title="نبض التقنية — موجز التقنية والذكاء الاصطناعي",
+            ),
+        )
+
+    @application.get("/saved", response_class=HTMLResponse)
+    async def saved_articles(request: Request):
+        articles, _ = database.list_articles(per_page=100)
+        return TEMPLATES.TemplateResponse(
+            request,
+            "saved.html",
+            _context(
+                request,
+                database,
+                articles=articles,
+                title="المحفوظات — نبض التقنية",
+                description="قائمة الأخبار التي حفظتها للقراءة لاحقًا على هذا الجهاز.",
             ),
         )
 
@@ -309,6 +326,20 @@ def create_app(database_path: Optional[str] = None) -> FastAPI:
         return JSONResponse(
             {"items": articles, "total": total, "page": max(page, 1), "per_page": per_page}
         )
+
+    @application.get("/api/stats")
+    async def api_stats():
+        return {"stats": database.stats(), "top_topics": database.top_topics()}
+
+    @application.get("/service-worker.js", include_in_schema=False)
+    async def service_worker():
+        response = FileResponse(
+            WEB_ROOT / "static" / "service-worker.js",
+            media_type="application/javascript",
+        )
+        response.headers["Cache-Control"] = "no-cache"
+        response.headers["Service-Worker-Allowed"] = "/"
+        return response
 
     @application.get("/feed.xml")
     async def rss_feed(request: Request):

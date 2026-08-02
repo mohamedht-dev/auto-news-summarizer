@@ -1,11 +1,21 @@
 {
+  "id": "/",
   "name": "نبض التقنية",
   "short_name": "نبض",
   "description": "موجز عربي ذكي لأخبار التقنية والذكاء الاصطناعي",
   "lang": "ar",
   "dir": "rtl",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#f6f4ec",
-  "theme_color": "#101a17"
+  "theme_color": "#101a17",
+  "categories": ["news", "technology"],
+  "icons": [
+    {"src": "/static/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}
+  ],
+  "shortcuts": [
+    {"name": "آخر الأخبار", "short_name": "الأخبار", "url": "/"},
+    {"name": "المحفوظات", "short_name": "محفوظ", "url": "/saved"}
+  ]
 }

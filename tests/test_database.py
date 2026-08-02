@@ -32,9 +32,14 @@ def test_database_persists_and_searches_articles(tmp_path):
     assert articles[0]["id"] == article_id
     assert article["companies"] == ["OpenAI"]
     assert article["key_points"] == ["النقطة الأولى", "النقطة الثانية"]
+    assert article["reading_minutes"] == 1
     assert database.known_links() == {"https://example.com/news/1"}
     assert database.categories() == ["artificial-intelligence"]
     assert database.stats() == {"articles": 1, "sources": 2, "categories": 1}
+    assert database.top_topics() == [
+        {"name": "OpenAI", "count": 1},
+        {"name": "AI", "count": 1},
+    ]
 
 
 def test_database_manages_sources_and_runs(tmp_path):

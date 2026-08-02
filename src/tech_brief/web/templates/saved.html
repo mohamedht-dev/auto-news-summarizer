@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% from "macros.html" import article_card %}
+{% block content %}
+<section class="page-hero compact-hero">
+  <div class="container">
+    <span class="eyebrow"><i></i> للعودة إليها لاحقًا</span>
+    <h1>أخبارك المحفوظة</h1>
+    <p>تُحفظ اختياراتك على هذا الجهاز فقط، دون حساب أو تتبع.</p>
+  </div>
+</section>
+<section class="content-section saved-section">
+  <div class="container">
+    <div class="saved-toolbar"><span><strong data-saved-total>0</strong> خبر محفوظ</span><button type="button" class="clear-filter" data-clear-saved>مسح القائمة</button></div>
+    <div class="news-grid" data-saved-grid>{% for article in articles %}{{ article_card(article, false, true) }}{% endfor %}</div>
+    <div class="empty-state" data-saved-empty>
+      <span class="empty-mark">♡</span><h2>لم تحفظ أخبارًا بعد</h2><p>استخدم زر الحفظ على أي خبر، وستجده هنا عند عودتك.</p><a class="button primary" href="/">استكشف الأخبار</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
