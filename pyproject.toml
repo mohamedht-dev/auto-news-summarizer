@@ -1,13 +1,17 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "arabic-ai-tech-brief"
-version = "0.1.0"
-authors = [
-  { name="Mohamed Awad" },
-]
-description = "An automated AI-powered tool to fetch, clean, and summarize technology news headlines and content."
+version = "0.2.0"
+description = "An open-source Python tool that generates bilingual daily technology briefings from RSS feeds using AI."
 readme = "README.md"
-requires-python = ">=3.8"
-license = { text = "MIT" }
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+    {name = "Mohamed Awad", email = "moha.awd@gmail.com"}
+]
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
@@ -16,15 +20,21 @@ classifiers = [
     "Intended Audience :: Developers",
 ]
 dependencies = [
-    "requests",
-    "beautifulsoup4",
-    "feedparser",
+    "openai>=1.0.0",
+    "feedparser>=6.0.10",
+    "beautifulsoup4>=4.12.0",
+    "requests>=2.31.0",
+    "pydantic>=2.0.0",
+    "typer>=0.9.0",
+    "python-dotenv>=1.0.0"
 ]
+
+[project.scripts]
+tech-brief = "tech_brief.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [project.urls]
 "Homepage" = "https://github.com/mohamedht-dev/auto-news-summarizer"
 "Bug Tracker" = "https://github.com/mohamedht-dev/auto-news-summarizer/issues"
-
-[build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"

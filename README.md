@@ -1,50 +1,43 @@
-# Arabic AI Tech Brief (الموجز التقني الذكي)
+# 🚀 Arabic AI Tech Intelligence Brief
 
-## نظرة عامة
-هذا المشروع عبارة عن أداة احترافية مفتوحة المصدر تقوم بجلب أخبار التقنية من خلاصات RSS، وتنظيف أوصافها، وتوليد ملخصات ذكية يومية. يدعم المشروع التلخيص باستخدام نماذج OpenAI المتقدمة (مثل `gpt-4o-mini`) مع توفير خيار تلخيص محلي مجاني لضمان الفائدة للجميع.
+[![Python Version](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Open Source](https://img.shields.io/badge/Open%20Source-Heart-red.svg)](https://github.com/mohamedht-dev/auto-news-summarizer)
 
-## الميزات الرئيسية ✅
-- **جلب الأخبار المستقر:** يستخدم خلاصات RSS مع معالجة للأخطاء وتوقيتات للطلبات لضمان استمرارية العمل.
-- **تلخيص ذكي (AI-Powered):** يدعم التلخيص باستخدام `gpt-4o-mini` لتوليد موجز دقيق باللغتين العربية والإنجليزية من أوصاف المقالات.
-- **وضع مجاني (Free Mode):** يتضمن خوارزمية تلخيص استخراجية تعمل تلقائياً في حال عدم توفر مفتاح API.
-- **أتمتة كاملة:** مدمج مع GitHub Actions لتوليد التقارير يومياً في تمام الساعة 8 صباحاً بتوقيت الرياض.
-- **تقارير منظمة:** يحفظ الملخصات يومياً بصيغة Markdown في مجلد `daily_briefings`.
-- **جودة الكود:** يتضمن اختبارات آلية (Automated Tests) باستخدام Mocks لضمان استقرار الوظائف الأساسية.
+أداة برمجية مفتوحة المصدر تقوم بتوليد موجز يومي ذكي لأهم أخبار التقنية والذكاء الاصطناعي باللغتين العربية والإنجليزية، مع أتمتة كاملة للتشغيل.
 
-## التثبيت
-1. **استنساخ المستودع:**
-   ```bash
-   git clone https://github.com/mohamedht-dev/auto-news-summarizer.git
-   cd auto-news-summarizer
-   ```
-2. **تثبيت التبعيات:**
-   ```bash
-   pip install .
-   ```
+An open-source Python tool that generates bilingual daily technology briefings from RSS feeds using AI, featuring full automation and professional CLI.
 
-## الاستخدام
-لتوليد الموجز يدوياً:
+## ✨ المميزات (Features)
+- **ذكاء اصطناعي متطور:** يستخدم `gpt-4o-mini` مع Structured Outputs لضمان دقة الملخصات.
+- **تحليل المحتوى الكامل:** لا يكتفي بالعناوين، بل يقرأ المقالات كاملة لاستخراج الفائدة.
+- **أتمتة كاملة:** يعمل تلقائياً كل صباح عبر GitHub Actions.
+- **دعم اللغتين:** ملخصات متزامنة بالعربية والإنجليزية.
+- **هيكل برمج احترافي:** حزمة Python قابلة للتثبيت وسهلة التوسيع.
+
+## 🛠️ التثبيت (Installation)
 ```bash
-python main.py
+git clone https://github.com/mohamedht-dev/auto-news-summarizer.git
+cd auto-news-summarizer
+pip install -e .
 ```
 
-لاستخدام التلخيص عبر OpenAI، قم بضبط مفتاح الـ API في البيئة:
+## 🚀 الاستخدام (Usage)
+تأكد من ضبط مفتاح OpenAI في متغيرات البيئة:
 ```bash
 export OPENAI_API_KEY='your-key-here'
-# يمكنك أيضاً تحديد النموذج (افتراضياً gpt-4o-mini)
-export OPENAI_MODEL='gpt-4o-mini'
+tech-brief generate --limit 5
 ```
 
-## خارطة الطريق (Roadmap)
-- [x] أتمتة GitHub Actions الصحيحة.
-- [x] دعم التلخيص الحقيقي بالذكاء الاصطناعي (من أوصاف RSS).
-- [x] إضافة الاختبارات الآلية.
-- [ ] جلب وتحليل محتوى المقالات الكاملة.
-- [ ] دعم مصادر أخبار عربية مباشرة.
-- [ ] إرسال التقرير تلقائياً عبر Telegram أو البريد الإلكتروني.
+## 📅 خارطة الطريق (Roadmap)
+- [x] تحويل المشروع إلى حزمة Python معيارية.
+- [x] دعم استخراج المحتوى الكامل للمقالات.
+- [x] استخدام مخرجات منظمة (Structured Outputs).
+- [ ] إضافة واجهة ويب بسيطة (FastAPI).
+- [ ] دعم قنوات إرسال إضافية (Telegram/Email).
 
-## المساهمة
-نرحب بالمساهمات! يرجى فتح Issue للنقاش قبل إرسال Pull Request.
+## 📄 الترخيص (License)
+هذا المشروع مرخص تحت رخصة **MIT**.
 
-## الترخيص
-هذا المشروع مرخص بموجب رخصة MIT - راجع ملف [LICENSE](LICENSE) للتفاصيل.
+---
+*Made with ❤️ for the Tech Community.*
