@@ -60,7 +60,7 @@ def create_app(database_path: Optional[str] = None) -> FastAPI:
     application = FastAPI(
         title="نبض التقنية",
         description="منصة عربية ذكية لمتابعة أهم أخبار التقنية والذكاء الاصطناعي.",
-        version="0.5.0",
+        version="0.5.1",
         docs_url="/api/docs",
         redoc_url=None,
     )

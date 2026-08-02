@@ -37,3 +37,30 @@ def test_fetch_all_records_source_errors(monkeypatch):
 
     assert fetcher.fetch_all() == []
     assert "HTTP 503" in fetcher.errors[0]
+
+
+def test_fetch_all_interleaves_sources_for_a_balanced_brief(monkeypatch):
+    def parse(url):
+        name = "Alpha" if "alpha" in url else "Beta"
+        return SimpleNamespace(
+            status=200,
+            entries=[
+                {"title": f"{name} {number}", "link": f"https://{name}.test/{number}"}
+                for number in range(2)
+            ],
+        )
+
+    monkeypatch.setattr("tech_brief.feeds.feedparser.parse", parse)
+    fetcher = FeedFetcher(
+        [
+            {"name": "Alpha", "url": "https://alpha.test/rss", "category": "ai"},
+            {"name": "Beta", "url": "https://beta.test/rss", "category": "tech"},
+        ]
+    )
+
+    assert [article.source for article in fetcher.fetch_all()] == [
+        "Alpha",
+        "Beta",
+        "Alpha",
+        "Beta",
+    ]

@@ -1,5 +1,6 @@
 """RSS feed collection."""
 
+from itertools import zip_longest
 from typing import Dict, Iterable, List, Mapping
 
 import feedparser
@@ -15,15 +16,18 @@ class FeedFetcher:
         self.errors: List[str] = []
 
     def fetch_all(self) -> List[Article]:
-        articles: List[Article] = []
+        source_batches: List[List[Article]] = []
         self.errors = []
 
         for source in self.sources:
             try:
-                articles.extend(self._fetch_source(source))
+                source_batches.append(self._fetch_source(source))
             except Exception as exc:  # A broken source should not stop the whole briefing.
                 self.errors.append(f"{source.get('name', 'Unknown source')}: {exc}")
 
+        articles: List[Article] = []
+        for batch in zip_longest(*source_batches):
+            articles.extend(article for article in batch if article is not None)
         return articles
 
     def _fetch_source(self, source: Mapping[str, str]) -> List[Article]:

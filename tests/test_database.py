@@ -76,6 +76,17 @@ def test_database_upserts_existing_link(tmp_path):
     assert database.get_article(first_id)["headline_ar"] == "عنوان محدث"
 
 
+def test_database_uses_sources_when_articles_have_no_entity_topics(tmp_path):
+    database = Database(str(tmp_path / "brief.db"))
+    database.initialize()
+    item = briefing_item()
+    item.companies = []
+    item.technologies = []
+    database.save_item(item, summarizer="extractive")
+
+    assert database.top_topics() == [{"name": "OpenAI", "count": 1}]
+
+
 def test_database_lock_prevents_concurrent_syncs(tmp_path):
     database = Database(str(tmp_path / "brief.db"))
     database.initialize()

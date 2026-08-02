@@ -248,16 +248,22 @@ class Database:
     def top_topics(self, limit: int = 8) -> List[Dict[str, object]]:
         with self.connect() as connection:
             rows = connection.execute(
-                "SELECT companies, technologies FROM articles ORDER BY id DESC LIMIT 200"
+                """SELECT companies, technologies, source_name
+                FROM articles ORDER BY id DESC LIMIT 200"""
             ).fetchall()
         topics: Counter = Counter()
+        sources: Counter = Counter()
         for row in rows:
+            if row["source_name"].strip():
+                sources[row["source_name"].strip()] += 1
             for value in self._json_list(row["companies"]):
                 if value.strip():
                     topics[value.strip()] += 1
             for value in self._json_list(row["technologies"]):
                 if value.strip():
                     topics[value.strip()] += 1
+        if not topics:
+            topics = sources
         return [
             {"name": name, "count": count}
             for name, count in topics.most_common(max(limit, 0))
