@@ -4,6 +4,8 @@
 [![Python Version](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mohamedht-dev/auto-news-summarizer)
+
 منصة ويب عربية مفتوحة المصدر تجمع أخبار التقنية والذكاء الاصطناعي من خلاصات RSS، تستخرج محتوى المقالات، وتحوّله إلى ملخصات عربية وإنجليزية قابلة للبحث والأرشفة. تعمل عبر OpenAI عند توفير المفتاح، وتتحول تلقائيًا إلى تلخيص استخراجي مجاني عند غيابه.
 
 An open-source Arabic-first news intelligence platform. It collects RSS articles, extracts their content, generates bilingual structured summaries, and serves a searchable web archive with an administration dashboard.
@@ -93,6 +95,12 @@ docker compose ps
 docker build -t tech-brief .
 docker run --rm -p 8000:8000 --env-file .env -v tech-brief-data:/app/data tech-brief
 ```
+
+## نشر مجاني مؤقت على Render
+
+يتضمن المشروع ملف `render.yaml` جاهزًا لخدمة Render المجانية. اضغط زر **Deploy to Render** أعلى الصفحة، ثم وافق على إنشاء الخدمة. تُعبّئ الخدمة ثمانية أخبار تلقائيًا عند كل إقلاع وتعيد نشر `main` بعد نجاح فحوصات CI.
+
+الخدمة المجانية تنام بعد الخمول، وقد تستغرق أول زيارة قرابة دقيقة. كما أن SQLite مؤقتة في الخطة المجانية؛ لذلك يُعاد بناء الأرشيف عند إعادة التشغيل. استخدم PostgreSQL أو قرصًا دائمًا عند الانتقال إلى إنتاج حقيقي.
 
 ## المسارات والواجهات
 

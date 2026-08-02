@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: nabd-tech-mohamedht
+    runtime: docker
+    plan: free
+    region: frankfurt
+    branch: main
+    autoDeployTrigger: checksPass
+    healthCheckPath: /health
+    envVars:
+      - key: TECH_BRIEF_DB
+        value: /app/data/tech_brief.db
+      - key: TECH_BRIEF_SYNC_ON_START
+        value: "1"
+      - key: TECH_BRIEF_STARTUP_LIMIT
+        value: "8"
+      - key: TECH_BRIEF_COOKIE_SECURE
+        value: "1"
+      - key: TECH_BRIEF_ALLOWED_HOSTS
+        value: "*.onrender.com"
+      - key: TECH_BRIEF_SESSION_SECRET
+        generateValue: true
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini

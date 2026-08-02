@@ -23,4 +23,4 @@ VOLUME ["/app/data"]
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
     CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)"
 
-CMD ["sh", "-c", "tech-brief serve --host 0.0.0.0 --port ${PORT:-8000}"]
+CMD ["sh", "-c", "if [ \"${TECH_BRIEF_SYNC_ON_START:-0}\" = \"1\" ]; then tech-brief sync --offline --limit \"${TECH_BRIEF_STARTUP_LIMIT:-8}\" || true; fi; exec tech-brief serve --host 0.0.0.0 --port \"${PORT:-8000}\""]
